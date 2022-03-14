@@ -1,5 +1,3 @@
-from functools import total_ordering
-from msilib.schema import ListBox
 import tkinter as tk
 import matplotlib.pyplot as plt
 import requests
