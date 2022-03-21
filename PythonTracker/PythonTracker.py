@@ -21,15 +21,16 @@ canvas.place(x=0, y=0)
 def submit():
     city = Name_Entry.get() 
     url = 'http://api.waqi.info/feed/' + city + '/?token=' 
-    api_key = '37f96394ffe8b6cca1110af3d8270604c711c688' 
+    api_key = '0b9adf177436d18c2b8247ac40f1e014c05f48c3' 
     main_url = url + api_key 
     r = requests.get(main_url)
-    data = r.json()['data']
+    data = r.json()['data']         #fetching data
     aqi = data['aqi']
     iaqi = data['iaqi'] 
 
-    del iaqi['p']
-
+    del iaqi['p']       #deleting unused info
+    
+    #assigning info to individual variables
     temperature = iaqi.get('t', 'Not Available')
     humidity = iaqi.get('h', 'Not Available')
     dew = iaqi.get('dew', 'Not Available')
@@ -52,21 +53,20 @@ def submit():
     list1.insert(10, f'pm25 :{pm25}g/m³')
 
     pollutants = [i for i in iaqi]
-    values = [i['v'] for i in iaqi.values()]
+    values = [i['v'] for i in iaqi.values()] #plotting list of pollutants in our chart
 
-    explode = [0 for i in pollutants]
+    explode = [0 for i in pollutants]       #transforming each element of list to a row and replicating index values 
     mx = values.index(max(values))
     explode[mx] = 0.1
 
     plt.figure(figsize=(8, 6))
-    plt.pie(values, labels=pollutants, explode=explode, autopct='%1.1f%%', shadow=True)
+    plt.pie(values, labels=pollutants, explode=explode, autopct='%1.1f%%', shadow=True) #creating our pie chart
 
-
-    level = 0
-    plt.title('Air pollutants and their probable amount in atmosphere of {} and the pollution level is {}'.format(city.upper(), level)) 
-
+    level = aqi
+    plt.title(' Air pollutants and their probable amount in atmosphere of {} and the pollution level is {}. '.format(city.upper(), level))
     plt.axis('equal')
-    plt.show() 
+    plt.text(-2, -1.3, 'AQI values at or below 100 are generally thought of as satisfactory. \nWhen AQI values are above 100, air quality is unhealthy.', style='italic', bbox = {'facecolor': 'red'})
+    plt.show()          #display pie chart
     name_var.set("")
 
 
@@ -89,6 +89,6 @@ sub_btn.place(x=674, y=241, width=150, height=47)
 
 
 root.resizable(False, False)
-root.mainloop()
+root.mainloop()         #main loop for continous execution
 
 
